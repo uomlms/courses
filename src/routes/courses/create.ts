@@ -17,7 +17,6 @@ router.post(
       .not()
       .isEmpty()
       .withMessage('Description is required'),
-    // @todo should be between 1 and 12
     body('semester')
       .isFloat({ min: 1, max: 12 })
       .withMessage('Semester is required'),

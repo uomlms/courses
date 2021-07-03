@@ -34,7 +34,8 @@ it('returns an error if an invalid name is provided', async () => {
     .set('Cookie', global.signup())
     .send({
       name: '',
-      description: 'a description'
+      description: 'a description',
+      semester: 13
     })
     .expect(400);
 
@@ -42,7 +43,8 @@ it('returns an error if an invalid name is provided', async () => {
     .post(basePath)
     .set('Cookie', global.signup())
     .send({
-      description: 'a description'
+      description: 'a description',
+      semester: 13
     })
     .expect(400);
 });
@@ -53,7 +55,8 @@ it('returns an error if an invalid description is provided', async () => {
     .set('Cookie', global.signup())
     .send({
       name: 'a name',
-      description: ''
+      description: '',
+      semester: 13
     })
     .expect(400);
 
@@ -61,7 +64,8 @@ it('returns an error if an invalid description is provided', async () => {
     .post(basePath)
     .set('Cookie', global.signup())
     .send({
-      name: 'a name'
+      name: 'a name',
+      semester: 13
     })
     .expect(400);
 });
@@ -87,6 +91,37 @@ it('returns an error if an invalid semester is provided', async () => {
       semester: 0
     })
     .expect(400);
+
+  await request(app)
+    .post(basePath)
+    .set('Cookie', global.signup())
+    .send({
+      name: 'a name',
+      description: 'a description'
+    })
+    .expect(400);
+
+  await request(app)
+    .post(basePath)
+    .set('Cookie', global.signup())
+    .send({
+      name: 'a name',
+      description: 'a description',
+      semester: ''
+    })
+    .expect(400);
+});
+
+it('returns authorized error if user is not staff', async () => {
+  await request(app)
+    .post(basePath)
+    .set('Cookie', global.signup())
+    .send({
+      name: 'a name',
+      description: 'a description',
+      semester: 12
+    })
+    .expect(401);
 });
 
 it('creates a course with valid inputs', async () => {
@@ -96,7 +131,9 @@ it('creates a course with valid inputs', async () => {
 
   await request(app)
     .post(basePath)
-    .set('Cookie', global.signup())
+    .set('Cookie', global.signup(
+      "staff"
+    ))
     .send({
       name: 'a name',
       description: 'a description',
