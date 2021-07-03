@@ -4,6 +4,7 @@ import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
 import { errorHandler, NotFoundError, currentUser } from '@uomlms/common';
 import { createCourseRouter } from './routes/courses/create';
+import { updateCourseRouter } from './routes/courses/update';
 
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(
 app.use(currentUser);
 
 app.use(createCourseRouter);
+app.use(updateCourseRouter);
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();
