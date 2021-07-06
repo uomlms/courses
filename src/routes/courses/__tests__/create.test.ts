@@ -59,7 +59,7 @@ it('returns an error if an invalid name is provided', async () => {
     .send({
       name: '',
       description: 'a description',
-      semester: 13
+      semester: 12
     })
     .expect(400);
 
@@ -68,7 +68,7 @@ it('returns an error if an invalid name is provided', async () => {
     .set('Cookie', global.signup("staff"))
     .send({
       description: 'a description',
-      semester: 13
+      semester: 12
     })
     .expect(400);
 });
@@ -80,7 +80,7 @@ it('returns an error if an invalid description is provided', async () => {
     .send({
       name: 'a name',
       description: '',
-      semester: 13
+      semester: 12
     })
     .expect(400);
 
@@ -89,7 +89,7 @@ it('returns an error if an invalid description is provided', async () => {
     .set('Cookie', global.signup("staff"))
     .send({
       name: 'a name',
-      semester: 13
+      semester: 12
     })
     .expect(400);
 });
