@@ -4,6 +4,7 @@ import cookieSession from 'cookie-session';
 import { errorHandler, NotFoundError, currentUser } from '@uomlms/common';
 import { createCourseRouter } from './routes/courses/create';
 import { updateCourseRouter } from './routes/courses/update';
+import { getCoursesRouter } from './routes/courses/get';
 
 
 const app = express();
@@ -21,6 +22,7 @@ app.use(currentUser);
 
 app.use(createCourseRouter);
 app.use(updateCourseRouter);
+app.use(getCoursesRouter);
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();
