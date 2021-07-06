@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post(
   '/api/courses',
-  requireAuth,
+  requireAuth(),
   [
     body('name')
       .not()
