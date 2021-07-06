@@ -5,6 +5,7 @@ import { errorHandler, NotFoundError, currentUser } from '@uomlms/common';
 import { createCourseRouter } from './routes/courses/create';
 import { updateCourseRouter } from './routes/courses/update';
 import { getCoursesRouter } from './routes/courses/get';
+import { deleteCourseRouter } from './routes/courses/delete';
 
 
 const app = express();
@@ -23,6 +24,7 @@ app.use(currentUser);
 app.use(createCourseRouter);
 app.use(updateCourseRouter);
 app.use(getCoursesRouter);
+app.use(deleteCourseRouter);
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();
