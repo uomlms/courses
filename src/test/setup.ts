@@ -6,7 +6,8 @@ import jwt from 'jsonwebtoken';
 declare global {
   namespace NodeJS {
     interface Global {
-      signup(): string[]
+      signup(role?: string): string[]
+      generateId(): string
     }
   }
 }
@@ -43,11 +44,12 @@ afterAll(async () => {
   await mongoose.connection.close();
 });
 
-global.signup = () => {
-  // Build a JWT payload.  { id, email }
+global.signup = (role: string = "student") => {
+  // Build a JWT payload.  { id, email, role }
   const payload = {
     id: new mongoose.Types.ObjectId().toHexString(),
     email: 'test@test.com',
+    role
   };
 
   // Create the JWT!
@@ -64,4 +66,8 @@ global.signup = () => {
 
   // return a string thats the cookie with the encoded data
   return [`express:sess=${base64}`];
+}
+
+global.generateId = () => {
+  return new mongoose.Types.ObjectId().toHexString();
 }
