@@ -1,6 +1,11 @@
-import mongoose from 'mongoose';
+import { connectDB } from '../config/db';
 import { app } from './app';
 import { kafka } from '@uomlms/common';
+
+import dotenv from 'dotenv';
+import { resolve } from "path"
+
+dotenv.config({ path: resolve(__dirname, "../config/config.env") });
 
 const start = async () => {
   if (!process.env.JWT_SECRET) {
@@ -25,12 +30,7 @@ const start = async () => {
     process.on('SIGINT', () => kafka.producer.disconnect());
     process.on('SIGTERM', () => kafka.producer.disconnect());
 
-    await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useCreateIndex: true,
-    });
-    console.log('Connected to MongoDb');
+    await connectDB();
   } catch (err) {
     console.error(err);
   }
