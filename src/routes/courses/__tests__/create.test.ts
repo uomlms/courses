@@ -19,10 +19,34 @@ it('can only be accessed if the user is signed in', async () => {
     .expect(401)
 });
 
-it('returns a status other than 401 if the user is signed in', async () => {
+it('returns a status 401 if the user has not role staff', async () => {
+  const id = global.generateId();
+  const path = `${basePath}/${id}`;
+  await request(app)
+    .patch(path)
+    .set('Cookie', global.signup())
+    .send({
+      name: 'a title',
+      description: 'a description',
+      semester: 1
+    })
+    .expect(401);
+
+  await request(app)
+    .patch(path)
+    .set('Cookie', global.signup("other role"))
+    .send({
+      name: 'a title',
+      description: 'a description',
+      semester: 1
+    })
+    .expect(401);
+});
+
+it('returns a status other than 401 if the user is signed in and has role staff', async () => {
   const response = await request(app)
     .post(basePath)
-    .set('Cookie', global.signup())
+    .set('Cookie', global.signup("staff"))
     .send({});
 
   expect(response.status).not.toEqual(401);
@@ -31,7 +55,7 @@ it('returns a status other than 401 if the user is signed in', async () => {
 it('returns an error if an invalid name is provided', async () => {
   await request(app)
     .post(basePath)
-    .set('Cookie', global.signup())
+    .set('Cookie', global.signup("staff"))
     .send({
       name: '',
       description: 'a description',
@@ -41,7 +65,7 @@ it('returns an error if an invalid name is provided', async () => {
 
   await request(app)
     .post(basePath)
-    .set('Cookie', global.signup())
+    .set('Cookie', global.signup("staff"))
     .send({
       description: 'a description',
       semester: 13
@@ -52,7 +76,7 @@ it('returns an error if an invalid name is provided', async () => {
 it('returns an error if an invalid description is provided', async () => {
   await request(app)
     .post(basePath)
-    .set('Cookie', global.signup())
+    .set('Cookie', global.signup("staff"))
     .send({
       name: 'a name',
       description: '',
@@ -62,7 +86,7 @@ it('returns an error if an invalid description is provided', async () => {
 
   await request(app)
     .post(basePath)
-    .set('Cookie', global.signup())
+    .set('Cookie', global.signup("staff"))
     .send({
       name: 'a name',
       semester: 13
@@ -74,7 +98,7 @@ it('returns an error if an invalid semester is provided', async () => {
 
   await request(app)
     .post(basePath)
-    .set('Cookie', global.signup())
+    .set('Cookie', global.signup("staff"))
     .send({
       name: 'a name',
       description: 'a description',
@@ -84,7 +108,7 @@ it('returns an error if an invalid semester is provided', async () => {
 
   await request(app)
     .post(basePath)
-    .set('Cookie', global.signup())
+    .set('Cookie', global.signup("staff"))
     .send({
       name: 'a name',
       description: 'a description',
@@ -94,7 +118,7 @@ it('returns an error if an invalid semester is provided', async () => {
 
   await request(app)
     .post(basePath)
-    .set('Cookie', global.signup())
+    .set('Cookie', global.signup("staff"))
     .send({
       name: 'a name',
       description: 'a description'
@@ -103,7 +127,7 @@ it('returns an error if an invalid semester is provided', async () => {
 
   await request(app)
     .post(basePath)
-    .set('Cookie', global.signup())
+    .set('Cookie', global.signup("staff"))
     .send({
       name: 'a name',
       description: 'a description',
@@ -112,28 +136,15 @@ it('returns an error if an invalid semester is provided', async () => {
     .expect(400);
 });
 
-it('returns authorized error if user is not staff', async () => {
-  await request(app)
-    .post(basePath)
-    .set('Cookie', global.signup())
-    .send({
-      name: 'a name',
-      description: 'a description',
-      semester: 12
-    })
-    .expect(401);
-});
+
 
 it('creates a course with valid inputs', async () => {
-
   let courses = await Course.find({});
   expect(courses.length).toEqual(0);
 
   await request(app)
     .post(basePath)
-    .set('Cookie', global.signup(
-      "staff"
-    ))
+    .set('Cookie', global.signup("staff"))
     .send({
       name: 'a name',
       description: 'a description',
