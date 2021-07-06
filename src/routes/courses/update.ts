@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { requireAuth, validateRequest } from '@uomlms/common';
+import { NotFoundError, requireAuth, validateRequest } from '@uomlms/common';
 import { body } from 'express-validator';
 
 import { Course } from '../../models/courses';
@@ -24,8 +24,18 @@ router.patch(
       .withMessage('Semester is required'),
   ],
   validateRequest,
-  (req: Request, res: Response) => {
-    res.send({});
+  async (req: Request, res: Response) => {
+    const course = await Course.findById(req.params.id);
+    if (!course) {
+      throw new NotFoundError();
+    }
+
+    const { name, description, semester } = req.body;
+    course.set({ name, description, semester });
+
+    await course.save();
+
+    res.send(course);
   });
 
 export { router as updateCourseRouter };

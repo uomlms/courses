@@ -81,4 +81,104 @@ it('returns an error if an invalid name is provided', async () => {
     .expect(400);
 });
 
+it('returns an error if an invalid description is provided', async () => {
+  const id = global.generateId();
+  const path = `${basePath}/${id}`;
+  await request(app)
+    .patch(path)
+    .set('Cookie', global.signup("staff"))
+    .send({
+      name: 'a name',
+      description: '',
+      semester: 12
+    })
+    .expect(400);
 
+  await request(app)
+    .patch(path)
+    .set('Cookie', global.signup("staff"))
+    .send({
+      name: 'a name',
+      semester: 12
+    })
+    .expect(400);
+});
+
+
+it('returns an error if an invalid semester is provided', async () => {
+  const id = global.generateId();
+  const path = `${basePath}/${id}`;
+  await request(app)
+    .patch(path)
+    .set('Cookie', global.signup("staff"))
+    .send({
+      name: 'a name',
+      description: 'a description',
+      semester: 13
+    })
+    .expect(400);
+
+  await request(app)
+    .patch(path)
+    .set('Cookie', global.signup("staff"))
+    .send({
+      name: 'a name',
+      description: 'a description',
+      semester: 0
+    })
+    .expect(400);
+
+  await request(app)
+    .patch(path)
+    .set('Cookie', global.signup("staff"))
+    .send({
+      name: 'a name',
+      description: 'a description'
+    })
+    .expect(400);
+
+  await request(app)
+    .patch(path)
+    .set('Cookie', global.signup("staff"))
+    .send({
+      name: 'a name',
+      description: 'a description',
+      semester: ''
+    })
+    .expect(400);
+});
+
+
+it('updates a course with valid inputs', async () => {
+  // generate cookie before requests to create and update with 
+  // the same user.
+  const cookie = global.signup("staff");
+  const response = await request(app)
+    .post(basePath)
+    .set('Cookie', cookie)
+    .send({
+      name: 'a name',
+      description: 'a description',
+      semester: 1
+    });
+
+  await request(app)
+    .patch(`${basePath}/${response.body.id}`)
+    .set('Cookie', cookie)
+    .send({
+      name: 'a different name',
+      description: 'a different description',
+      semester: 2
+    })
+    .expect(200);
+
+  const courseResponse = await request(app)
+    .get(`${basePath}/${response.body.id}`)
+    .set('Cookie', cookie)
+    .send()
+    .expect(200);
+
+  expect(courseResponse.body.name).toEqual('a different name');
+  expect(courseResponse.body.description).toEqual('a different description');
+  expect(courseResponse.body.semester).toEqual(2);
+});
