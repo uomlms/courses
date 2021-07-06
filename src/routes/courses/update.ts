@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.patch(
   '/api/courses/:id',
-  requireAuth,
+  requireAuth("staff"),
   [
     body('name')
       .not()
