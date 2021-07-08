@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { requireAuth, validateRequest } from '@uomlms/common';
 import { Course } from '../../models/courses';
+import { createAssignmentRouter } from '../assignments/create';
 
 const router = express.Router();
 
@@ -34,6 +35,8 @@ router.post(
       .status(201)
       .send(course);
   });
+
+router.use('/api/courses/:courseId/assignments', createAssignmentRouter);
 
 
 export { router as createCourseRouter }
