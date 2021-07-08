@@ -23,7 +23,7 @@ it('returns a status 401 if the user has not role staff', async () => {
   const id = global.generateId();
   const path = `${basePath}/${id}`;
   await request(app)
-    .patch(path)
+    .post(path)
     .set('Cookie', global.signup())
     .send({
       name: 'a title',
@@ -33,7 +33,7 @@ it('returns a status 401 if the user has not role staff', async () => {
     .expect(401);
 
   await request(app)
-    .patch(path)
+    .post(path)
     .set('Cookie', global.signup("other role"))
     .send({
       name: 'a title',
