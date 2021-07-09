@@ -41,13 +41,19 @@ const AssignmentSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ["obligatory", "optional"],
+    enum: {
+      values: ["obligatory", "optional"],
+      message: "Type {VALUE} is not supported. Type is either obligatory or optional.",
+    },
     default: "optional",
     required: true
   },
   status: {
     type: String,
-    enum: ["active", "inactive", "expired"],
+    enum: {
+      values: ["active", "inactive", "expired"],
+      message: "Status {VALUE} is not supported. Status is either active, inactive or expired"
+    },
     default: "active"
   },
   createdAt: {
