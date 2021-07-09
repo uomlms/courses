@@ -8,7 +8,7 @@ const router = express.Router({ mergeParams: true });
 
 router.post(
   '/',
-  requireAuth("staff"),
+  // requireAuth("staff"),
   [
     body('name')
       .not()
@@ -52,7 +52,8 @@ router.post(
       files,
       deadline,
       type,
-      status
+      status,
+      course: courseId
     });
 
     await assignment.save();

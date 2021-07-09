@@ -8,6 +8,7 @@ interface AssignmentAttrs {
   deadline: Date;
   type: string
   status?: string;
+  course: string;
 }
 
 interface AssignmentDoc extends mongoose.Document {
@@ -17,6 +18,7 @@ interface AssignmentDoc extends mongoose.Document {
   deadline: Date;
   type: string
   status?: string;
+  course: string;
 }
 
 interface AssignmentModel extends mongoose.Model<AssignmentDoc> {
@@ -55,6 +57,11 @@ const AssignmentSchema = new mongoose.Schema({
       message: "Status {VALUE} is not supported. Status is either active, inactive or expired"
     },
     default: "active"
+  },
+  course: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Course",
+    required: [true, "Course is required"]
   },
   createdAt: {
     type: Date,

@@ -181,7 +181,7 @@ it('returns an error if an invalid type is provided', async () => {
 });
 
 
-it('returns not found if course not exists', async () => {
+it('returns error not found if course not exists', async () => {
   const id = global.generateId();
   const path = `${basePath}/${id}/assignments`;
   await request(app)
