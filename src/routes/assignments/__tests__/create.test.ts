@@ -1,5 +1,6 @@
 import request from 'supertest';
 import { app } from '../../../app';
+import { Assignment } from '../../../models/assignments';
 
 const basePath = '/api/courses';
 
@@ -150,4 +151,80 @@ it('returns an error if an invalid deadline is provided', async () => {
       type: "obligatory",
     })
     .expect(400);
+});
+
+it('returns an error if an invalid type is provided', async () => {
+  const id = global.generateId();
+  const path = `${basePath}/${id}/assignments`;
+  await request(app)
+    .post(path)
+    .set('Cookie', global.signup("staff"))
+    .send({
+      name: 'a name',
+      description: 'a description',
+      semester: 1,
+      deadline: '2021-07-07T23:12:11',
+      type: "",
+    })
+    .expect(400);
+
+  await request(app)
+    .post(path)
+    .set('Cookie', global.signup("staff"))
+    .send({
+      name: 'a name',
+      description: 'a description',
+      semester: 1,
+      deadline: '2021-07-07T23:12:11',
+    })
+    .expect(400);
+});
+
+
+it('returns not found if course not exists', async () => {
+  const id = global.generateId();
+  const path = `${basePath}/${id}/assignments`;
+  await request(app)
+    .post(path)
+    .set('Cookie', global.signup("staff"))
+    .send({
+      name: 'a name',
+      description: 'a description',
+      semester: 1,
+      deadline: '2021-07-07T23:12:11',
+      type: "obligatory",
+    })
+    .expect(404);
+});
+
+
+it('creates an assignment with valid inputs', async () => {
+  const course = await request(app)
+    .post(basePath)
+    .set('Cookie', global.signup("staff"))
+    .send({
+      name: 'a name',
+      description: 'a description',
+      semester: 12
+    })
+    .expect(201);
+
+  let assignments = await Assignment.find({});
+  expect(assignments.length).toEqual(0);
+
+  const path = `${basePath}/${course.body.id}/assignments`;
+  await request(app)
+    .post(path)
+    .set('Cookie', global.signup("staff"))
+    .send({
+      name: 'a name',
+      description: 'a description',
+      semester: 1,
+      deadline: '2021-07-07T23:12:11',
+      type: "obligatory",
+    })
+    .expect(201);
+
+  assignments = await Assignment.find({});
+  expect(assignments.length).toEqual(1);
 });
