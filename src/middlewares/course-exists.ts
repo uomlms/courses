@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { NotFoundError } from '@uomlms/common';
-import { Course } from '../../models/courses';
+import { Course } from '../models/courses';
 
 export const courseExists = async (
   req: Request,

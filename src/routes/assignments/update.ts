@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { validateRequest, requireAuth, NotFoundError } from '@uomlms/common';
-import { courseExists } from './course-exists';
+import { courseExists } from '../../middlewares/course-exists';
 import { Assignment } from '../../models/assignments';
 
 const router = express.Router({ mergeParams: true });
