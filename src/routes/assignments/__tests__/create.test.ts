@@ -5,8 +5,8 @@ import { Assignment } from '../../../models/assignments';
 const basePath = '/api/courses';
 
 it('has a route handler listening to /api/courses/:courseId/assignments for post requests', async () => {
-  const id = global.generateId();
-  const path = `${basePath}/${id}/assignments`;
+  const courseId = global.generateId();
+  const path = `${basePath}/${courseId}/assignments`;
   const response = await request(app)
     .post(path)
     .send({});
@@ -15,8 +15,8 @@ it('has a route handler listening to /api/courses/:courseId/assignments for post
 });
 
 it('can only be accessed if the user is signed in', async () => {
-  const id = global.generateId();
-  const path = `${basePath}/${id}/assignments`;
+  const courseId = global.generateId();
+  const path = `${basePath}/${courseId}/assignments`;
   await request(app)
     .post(path)
     .send({})
@@ -24,8 +24,8 @@ it('can only be accessed if the user is signed in', async () => {
 });
 
 it('returns a status 401 if the user has not role staff', async () => {
-  const id = global.generateId();
-  const path = `${basePath}/${id}/assignments`;
+  const courseId = global.generateId();
+  const path = `${basePath}/${courseId}/assignments`;
   await request(app)
     .post(path)
     .set('Cookie', global.signup())
@@ -40,8 +40,8 @@ it('returns a status 401 if the user has not role staff', async () => {
 });
 
 it('returns a status other than 401 if the user is signed in and has role staff', async () => {
-  const id = global.generateId();
-  const path = `${basePath}/${id}/assignments`;
+  const courseId = global.generateId();
+  const path = `${basePath}/${courseId}/assignments`;
   const response = await request(app)
     .post(path)
     .set('Cookie', global.signup("staff"))
@@ -51,8 +51,8 @@ it('returns a status other than 401 if the user is signed in and has role staff'
 });
 
 it('returns an error if an invalid name is provided', async () => {
-  const id = global.generateId();
-  const path = `${basePath}/${id}/assignments`;
+  const courseId = global.generateId();
+  const path = `${basePath}/${courseId}/assignments`;
   await request(app)
     .post(path)
     .set('Cookie', global.signup("staff"))
@@ -78,8 +78,8 @@ it('returns an error if an invalid name is provided', async () => {
 });
 
 it('returns an error if an invalid description is provided', async () => {
-  const id = global.generateId();
-  const path = `${basePath}/${id}/assignments`;
+  const courseId = global.generateId();
+  const path = `${basePath}/${courseId}/assignments`;
   await request(app)
     .post(path)
     .set('Cookie', global.signup("staff"))
@@ -105,8 +105,8 @@ it('returns an error if an invalid description is provided', async () => {
 });
 
 it('returns an error if an invalid deadline is provided', async () => {
-  const id = global.generateId();
-  const path = `${basePath}/${id}/assignments`;
+  const courseId = global.generateId();
+  const path = `${basePath}/${courseId}/assignments`;
   await request(app)
     .post(path)
     .set('Cookie', global.signup("staff"))
@@ -154,8 +154,8 @@ it('returns an error if an invalid deadline is provided', async () => {
 });
 
 it('returns an error if an invalid type is provided', async () => {
-  const id = global.generateId();
-  const path = `${basePath}/${id}/assignments`;
+  const courseId = global.generateId();
+  const path = `${basePath}/${courseId}/assignments`;
   await request(app)
     .post(path)
     .set('Cookie', global.signup("staff"))
@@ -182,8 +182,8 @@ it('returns an error if an invalid type is provided', async () => {
 
 
 it('returns error not found if course not exists', async () => {
-  const id = global.generateId();
-  const path = `${basePath}/${id}/assignments`;
+  const courseId = global.generateId();
+  const path = `${basePath}/${courseId}/assignments`;
   await request(app)
     .post(path)
     .set('Cookie', global.signup("staff"))
@@ -219,7 +219,6 @@ it('creates an assignment with valid inputs', async () => {
     .send({
       name: 'a name',
       description: 'a description',
-      semester: 1,
       deadline: '2021-07-07T23:12:11',
       type: "obligatory",
     })
