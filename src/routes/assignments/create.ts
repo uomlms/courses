@@ -1,14 +1,14 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
-import { requireAuth, validateRequest, NotFoundError } from '@uomlms/common';
-import { Course } from '../../models/courses';
+import { requireAuth, validateRequest } from '@uomlms/common';
+import { courseExists } from './course-exists';
 import { Assignment } from '../../models/assignments';
 
 const router = express.Router({ mergeParams: true });
 
 router.post(
   '/',
-  // requireAuth("staff"),
+  requireAuth("staff"),
   [
     body('name')
       .not()
@@ -30,30 +30,23 @@ router.post(
       .withMessage("Type is required.")
   ],
   validateRequest,
+  courseExists,
   async (req: Request, res: Response) => {
     const {
       name,
       description,
-      files,
       deadline,
       type,
       status
     } = req.body;
 
-    const courseId = req.params.courseId;
-    const course = await Course.findById(courseId);
-    if (!course) {
-      throw new NotFoundError()
-    }
-
     const assignment = Assignment.build({
       name,
       description,
-      files,
       deadline,
       type,
       status,
-      course: courseId
+      course: req.params.courseId
     });
 
     await assignment.save();
