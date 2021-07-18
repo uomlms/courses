@@ -1,9 +1,8 @@
 import express, { Request, Response } from 'express';
 import { NotFoundError, requireAuth, validateRequest } from '@uomlms/common';
 import { body } from 'express-validator';
-
 import { Course } from '../../models/courses';
-
+import { updateAssignmentRouter } from '../assignments/update';
 
 const router = express.Router();
 
@@ -37,5 +36,7 @@ router.patch(
 
     res.send(course);
   });
+
+router.use('/api/courses/:courseId/assignments', updateAssignmentRouter);
 
 export { router as updateCourseRouter };
