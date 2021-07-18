@@ -54,7 +54,7 @@ it('returns a status other than 401 if the user is signed in and has role staff'
 });
 
 
-it('updates a course with valid inputs', async () => {
+it('deletes a course', async () => {
   const createResponse = await request(app)
     .post(basePath)
     .set('Cookie', global.signup("staff"))
@@ -86,5 +86,4 @@ it('updates a course with valid inputs', async () => {
     .expect(200);
 
   expect(getResponse.body.length).toEqual(0);
-
 });
