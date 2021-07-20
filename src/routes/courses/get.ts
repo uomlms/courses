@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import { requireAuth, NotFoundError } from '@uomlms/common';
-
 import { Course } from '../../models/courses';
+import { getAssignmentsRouter } from '../assignments/get';
 
 const router = express.Router();
 
@@ -24,5 +24,7 @@ router.get(
     res.send(courses);
   }
 )
+
+router.use("/api/courses/:courseId/assignments", getAssignmentsRouter);
 
 export { router as getCoursesRouter };
