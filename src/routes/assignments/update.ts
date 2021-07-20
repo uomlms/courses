@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { validateRequest, requireAuth, NotFoundError } from '@uomlms/common';
 import { courseExists } from '../../middlewares/course-exists';
+import { validateAssignment } from '../../middlewares/validate-assignment';
 import { Assignment } from '../../models/assignments';
 
 const router = express.Router({ mergeParams: true });
@@ -31,6 +32,7 @@ router.patch(
   ],
   validateRequest,
   courseExists,
+  validateAssignment,
   async (req: Request, res: Response) => {
     const assignmentId = req.params.id;
     const assignment = await Assignment.findById(assignmentId);

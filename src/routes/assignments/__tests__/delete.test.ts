@@ -59,6 +59,64 @@ it('returns a status other than 401 if the user is signed in and has role staff'
   expect(response.status).not.toEqual(401);
 });
 
+it('returns a 404 if the assignment do not belong to course', async () => {
+  const first_course = await request(app)
+    .post(basePath)
+    .set('Cookie', global.signup("staff"))
+    .send({
+      name: 'a name',
+      description: 'a description',
+      semester: 12
+    })
+    .expect(201);
+
+  const second_course = await request(app)
+    .post(basePath)
+    .set('Cookie', global.signup("staff"))
+    .send({
+      name: 'a name',
+      description: 'a description',
+      semester: 12
+    })
+    .expect(201);
+
+  let createAssignmentPath = `${basePath}/${first_course.body.id}/assignments`;
+  console.log(`createAssignemntPath: ${createAssignmentPath}`);
+  const first_assignment = await request(app)
+    .post(createAssignmentPath)
+    .set('Cookie', global.signup("staff"))
+    .send({
+      name: 'a name',
+      description: 'a description',
+      deadline: '2021-07-07T23:12:11',
+      type: "obligatory",
+    })
+    .expect(201);
+
+  createAssignmentPath = `${basePath}/${second_course.body.id}/assignments`;
+  const second_assignment = await request(app)
+    .post(createAssignmentPath)
+    .set('Cookie', global.signup("staff"))
+    .send({
+      name: 'a name',
+      description: 'a description',
+      deadline: '2021-07-07T23:12:11',
+      type: "obligatory",
+    })
+    .expect(201);
+
+  await request(app)
+    .delete(`${basePath}/${first_course.body.id}/assignments/${second_assignment.body.id}`)
+    .set('Cookie', global.signup("staff"))
+    .send()
+    .expect(404);
+
+  await request(app)
+    .delete(`${basePath}/${second_course.body.id}/assignments/${first_assignment.body.id}`)
+    .set('Cookie', global.signup("staff"))
+    .send()
+    .expect(404);
+});
 
 it('deletes an assignment', async () => {
   const createCourseResponse = await request(app)
