@@ -1,7 +1,6 @@
 import request from 'supertest';
 import { app } from '../../../app';
-
-import { Course } from '../../../models/courses';
+import { createCourse } from '../../../test/seed';
 
 const basePath = '/api/courses';
 
@@ -78,18 +77,6 @@ it('returns a course if the course is found', async () => {
 });
 
 
-
-const createCourse = () => {
-  return request(app)
-    .post(basePath)
-    .set('Cookie', global.signup("staff"))
-    .send({
-      name: "a name",
-      description: "a description",
-      semester: 3
-    })
-    .expect(201);
-}
 
 it('can fetch a list of courses', async () => {
   await createCourse();

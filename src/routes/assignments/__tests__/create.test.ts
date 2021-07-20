@@ -1,5 +1,6 @@
 import request from 'supertest';
 import { app } from '../../../app';
+import { createCourse, createAssignment } from '../../../test/seed';
 import { Assignment } from '../../../models/assignments';
 
 const basePath = '/api/courses';
@@ -199,30 +200,12 @@ it('returns error not found if course not exists', async () => {
 
 
 it('creates an assignment with valid inputs', async () => {
-  const course = await request(app)
-    .post(basePath)
-    .set('Cookie', global.signup("staff"))
-    .send({
-      name: 'a name',
-      description: 'a description',
-      semester: 12
-    })
-    .expect(201);
+  const course = await createCourse();
 
   let assignments = await Assignment.find({});
   expect(assignments.length).toEqual(0);
 
-  const path = `${basePath}/${course.body.id}/assignments`;
-  await request(app)
-    .post(path)
-    .set('Cookie', global.signup("staff"))
-    .send({
-      name: 'a name',
-      description: 'a description',
-      deadline: '2021-07-07T23:12:11',
-      type: "obligatory",
-    })
-    .expect(201);
+  await createAssignment({ courseId: course.body.id });
 
   assignments = await Assignment.find({});
   expect(assignments.length).toEqual(1);

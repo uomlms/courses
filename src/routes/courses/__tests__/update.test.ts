@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { app } from '../../../app';
-import { Course } from '../../../models/courses';
+import { createCourse } from '../../../test/seed';
 
 const basePath = '/api/courses';
 
@@ -150,21 +150,11 @@ it('returns an error if an invalid semester is provided', async () => {
 
 
 it('updates a course with valid inputs', async () => {
-  // generate cookie before requests to create and update with 
-  // the same user.
-  const cookie = global.signup("staff");
-  const response = await request(app)
-    .post(basePath)
-    .set('Cookie', cookie)
-    .send({
-      name: 'a name',
-      description: 'a description',
-      semester: 1
-    });
+  const course = await createCourse();
 
   await request(app)
-    .patch(`${basePath}/${response.body.id}`)
-    .set('Cookie', cookie)
+    .patch(`${basePath}/${course.body.id}`)
+    .set('Cookie', global.signup("staff"))
     .send({
       name: 'a different name',
       description: 'a different description',
@@ -172,13 +162,13 @@ it('updates a course with valid inputs', async () => {
     })
     .expect(200);
 
-  const courseResponse = await request(app)
-    .get(`${basePath}/${response.body.id}`)
-    .set('Cookie', cookie)
+  const updateCourseResponse = await request(app)
+    .get(`${basePath}/${course.body.id}`)
+    .set('Cookie', global.signup("staff"))
     .send()
     .expect(200);
 
-  expect(courseResponse.body.name).toEqual('a different name');
-  expect(courseResponse.body.description).toEqual('a different description');
-  expect(courseResponse.body.semester).toEqual(2);
+  expect(updateCourseResponse.body.name).toEqual('a different name');
+  expect(updateCourseResponse.body.description).toEqual('a different description');
+  expect(updateCourseResponse.body.semester).toEqual(2);
 });

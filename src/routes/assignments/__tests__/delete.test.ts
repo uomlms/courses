@@ -2,7 +2,7 @@ import request from 'supertest';
 import { app } from '../../../app';
 import { Assignment } from '../../../models/assignments';
 import { Course } from '../../../models/courses';
-import { createAssignmentRouter } from '../create';
+import { createCourse, createAssignment } from '../../../test/seed';
 
 const basePath = '/api/courses';
 
@@ -60,50 +60,12 @@ it('returns a status other than 401 if the user is signed in and has role staff'
 });
 
 it('returns a 404 if the assignment do not belong to course', async () => {
-  const first_course = await request(app)
-    .post(basePath)
-    .set('Cookie', global.signup("staff"))
-    .send({
-      name: 'a name',
-      description: 'a description',
-      semester: 12
-    })
-    .expect(201);
+  const first_course = await createCourse();
 
-  const second_course = await request(app)
-    .post(basePath)
-    .set('Cookie', global.signup("staff"))
-    .send({
-      name: 'a name',
-      description: 'a description',
-      semester: 12
-    })
-    .expect(201);
+  const second_course = await createCourse();
 
-  let createAssignmentPath = `${basePath}/${first_course.body.id}/assignments`;
-  console.log(`createAssignemntPath: ${createAssignmentPath}`);
-  const first_assignment = await request(app)
-    .post(createAssignmentPath)
-    .set('Cookie', global.signup("staff"))
-    .send({
-      name: 'a name',
-      description: 'a description',
-      deadline: '2021-07-07T23:12:11',
-      type: "obligatory",
-    })
-    .expect(201);
-
-  createAssignmentPath = `${basePath}/${second_course.body.id}/assignments`;
-  const second_assignment = await request(app)
-    .post(createAssignmentPath)
-    .set('Cookie', global.signup("staff"))
-    .send({
-      name: 'a name',
-      description: 'a description',
-      deadline: '2021-07-07T23:12:11',
-      type: "obligatory",
-    })
-    .expect(201);
+  const first_assignment = await createAssignment({ courseId: first_course.body.id })
+  const second_assignment = await createAssignment({ courseId: second_course.body.id })
 
   await request(app)
     .delete(`${basePath}/${first_course.body.id}/assignments/${second_assignment.body.id}`)
@@ -119,36 +81,17 @@ it('returns a 404 if the assignment do not belong to course', async () => {
 });
 
 it('deletes an assignment', async () => {
-  const createCourseResponse = await request(app)
-    .post(basePath)
-    .set('Cookie', global.signup("staff"))
-    .send({
-      name: "a name",
-      description: "a description",
-      semester: 3
-    })
-    .expect(201);
+  const course = await createCourse();
 
   const courses = await Course.find({});
   expect(courses.length).toEqual(1);
 
-  const courseId = createCourseResponse.body.id;
-  const createAssignmentPath = `${basePath}/${courseId}/assignments`;
-  const createAssignmentResponse = await request(app)
-    .post(createAssignmentPath)
-    .set('Cookie', global.signup("staff"))
-    .send({
-      name: 'a name',
-      description: 'a description',
-      deadline: '2021-07-07T23:12:11',
-      type: "obligatory",
-    })
-    .expect(201);
+  const createAssignmentResponse = await await createAssignment({ courseId: course.body.id })
 
   let assignments = await Assignment.find({});
   expect(assignments.length).toEqual(1);
 
-  const deleteAssignmentPath = `${basePath}/${courseId}/assignments/${createAssignmentResponse.body.id}`;
+  const deleteAssignmentPath = `${basePath}/${course.body.id}/assignments/${createAssignmentResponse.body.id}`;
   await request(app)
     .delete(deleteAssignmentPath)
     .set('Cookie', global.signup("staff"))
