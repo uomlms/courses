@@ -140,3 +140,20 @@ it('returns an asignment if the asignment is found', async () => {
   expect(assignmentResponse.body.deadline).toEqual(new Date(data.deadline).toISOString());
   expect(assignmentResponse.body.type).toEqual(data.type);
 });
+
+it('can fetch a list of assignments', async () => {
+  const course = await createCourse();
+  const courseId = course.body.id;
+  await createAssignment({ courseId });
+  await createAssignment({ courseId });
+  await createAssignment({ courseId });
+
+  const getAssignmentPath = `${basePath}/${courseId}/assignments`;
+  const response = await request(app)
+    .get(getAssignmentPath)
+    .set('Cookie', global.signup())
+    .send()
+    .expect(200);
+
+  expect(response.body.length).toEqual(3);
+});

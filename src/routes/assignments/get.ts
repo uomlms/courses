@@ -12,7 +12,7 @@ router.get(
   courseExists,
   async (req: Request, res: Response) => {
     const assignments = await Assignment.find({
-      course: req.params.id
+      course: req.params.courseId
     });
 
     res.send(assignments);
