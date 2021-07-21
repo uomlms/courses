@@ -23,7 +23,7 @@
     "@types/jsonwebtoken": "^8.5.1",
     "@types/swagger-jsdoc": "^6.0.0",
     "@types/swagger-ui-express": "^4.1.2",
-    "@uomlms/common": "^1.0.12",
+    "@uomlms/common": "^1.0",
     "bcryptjs": "^2.4.3",
     "cookie-session": "^1.4.0",
     "dotenv": "^8.6.0",
