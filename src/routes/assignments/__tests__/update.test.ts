@@ -196,7 +196,6 @@ it('returns error not found if course not exists', async () => {
 
 it('returns a 404 if the assignment do not belong to course', async () => {
   const first_course = await createCourse();
-
   const second_course = await createCourse();
 
   const first_assignment = await createAssignment({ courseId: first_course.body.id })
