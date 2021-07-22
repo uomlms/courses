@@ -6,6 +6,7 @@ interface AssignmentAttrs {
   description: string;
   files?: string[];
   deadline: Date;
+  configFile?: string
   type: string
   status?: string;
   course: string;
@@ -16,6 +17,7 @@ interface AssignmentDoc extends mongoose.Document {
   description: string;
   files?: string[];
   deadline: Date;
+  configFile?: string
   type: string
   status?: string;
   course: string;
@@ -40,6 +42,9 @@ const AssignmentSchema = new mongoose.Schema({
   deadline: {
     type: Date,
     required: true
+  },
+  configFile: {
+    type: String
   },
   type: {
     type: String,

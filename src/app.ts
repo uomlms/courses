@@ -6,7 +6,7 @@ import { createCourseRouter } from './routes/courses/create';
 import { updateCourseRouter } from './routes/courses/update';
 import { getCoursesRouter } from './routes/courses/get';
 import { deleteCourseRouter } from './routes/courses/delete';
-import { submitAssignmentRouter } from './routes/assignments/submit';
+import { assignmentActionsRouter } from './routes/assignments/actions';
 
 const app = express();
 app.set('trust proxy', true);
@@ -26,7 +26,7 @@ app.use(updateCourseRouter);
 app.use(getCoursesRouter);
 app.use(deleteCourseRouter);
 
-app.use(submitAssignmentRouter);
+app.use(assignmentActionsRouter);
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();
