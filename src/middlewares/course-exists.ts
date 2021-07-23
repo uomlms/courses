@@ -1,21 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 import { NotFoundError } from '@uomlms/common';
-import { Course } from '../models/courses';
+import { Course, CourseDoc } from '../models/courses';
 
-
-// defines the payload of the course
-interface CoursePayload {
-  name: string;
-  description: string;
-  semester: number;
-  status?: string;
-}
 
 // declares an extra attribute to Request Object
 declare global {
   namespace Express {
     interface Request {
-      course?: CoursePayload
+      course?: CourseDoc
     }
   }
 }

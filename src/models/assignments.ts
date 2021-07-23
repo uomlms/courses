@@ -88,4 +88,4 @@ AssignmentSchema.statics.build = (attrs: AssignmentAttrs) => {
 
 const Assignment = mongoose.model<AssignmentDoc, AssignmentModel>('Assignment', AssignmentSchema);
 
-export { Assignment }
+export { Assignment, AssignmentDoc }

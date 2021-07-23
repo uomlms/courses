@@ -1,25 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import { NotFoundError } from '@uomlms/common';
-import { Assignment } from '../models/assignments';
-import mongoose from 'mongoose';
-
-// defines the payload of the Assignment
-interface AssignmentPayload extends mongoose.Document {
-  name: string;
-  description: string;
-  files?: string[];
-  deadline: Date;
-  configFile?: string
-  type: string
-  status?: string;
-  course: string;
-}
+import { Assignment, AssignmentDoc } from '../models/assignments';
 
 // declares an extra attribute to Request Object
 declare global {
   namespace Express {
     interface Request {
-      assignment?: AssignmentPayload
+      assignment?: AssignmentDoc
     }
   }
 }

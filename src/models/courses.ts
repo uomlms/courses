@@ -57,4 +57,4 @@ CourseSchema.statics.build = (attrs: CourseAttrs) => {
 
 const Course = mongoose.model<CourseDoc, CourseModel>('Course', CourseSchema);
 
-export { Course }
+export { Course, CourseDoc }
