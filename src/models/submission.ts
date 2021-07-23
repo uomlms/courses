@@ -33,8 +33,8 @@ const SubmissionSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: {
-      values: ["pending", "completed"],
-      message: "Type {VALUE} is not supported. Type is either pending or completed.",
+      values: ["pending", "fail", "success"],
+      message: "Type {VALUE} is not supported. Type is either pending, fail or success.",
     },
     default: "pending",
     required: true
@@ -48,6 +48,14 @@ const SubmissionSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  }
+}, {
+  toJSON: {
+    transform(doc, ret) {
+      ret.id = ret._id;
+      delete ret._id;
+      delete ret.__v;
+    }
   }
 });
 
