@@ -4,7 +4,7 @@ import { Submission } from '../../models/submission';
 import { courseExists } from '../../middlewares/course-exists';
 import { validateAssignment } from '../../middlewares/validate-assignment';
 import { AssignmentSubmitProducer } from '../../kafka/producers/assignment-submit-producer';
-import { uploadS3 } from '../../middlewares/upload-s3';
+import { uploadS3 } from '@uomlms/common';
 
 const basePath = '/api/courses/:courseId/assignments/:id';
 const router = express.Router();
