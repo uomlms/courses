@@ -15,18 +15,24 @@ const s3 = new aws.S3({
 });
 
 const bucket = process.env.AWS_BUCKET || "uomlms";
-export const uploadS3 = multer({
-  storage: multerS3({
-    s3,
-    bucket,
-    contentType: multerS3.AUTO_CONTENT_TYPE,
-    metadata: function (req, file, cb) {
-      cb(null, { fieldName: file.fieldname });
-    },
-    key: function (req: Request, file, cb) {
-      const id = crypto.randomBytes(16).toString("hex");
-      const path = `${id}-${file.originalname}`;
-      cb(null, path);
-    }
+
+interface UploadS3ParametersInterface {
+  destination: string;
+}
+export const uploadS3 = (params: UploadS3ParametersInterface) => {
+  return multer({
+    storage: multerS3({
+      s3,
+      bucket,
+      contentType: multerS3.AUTO_CONTENT_TYPE,
+      metadata: function (req, file, cb) {
+        cb(null, { fieldName: file.fieldname });
+      },
+      key: function (req: Request, file, cb) {
+        const id = crypto.randomBytes(16).toString("hex");
+        const path = `${params.destination}/${id}-${file.originalname}`;
+        cb(null, path);
+      }
+    })
   })
-});
+};
