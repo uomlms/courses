@@ -85,3 +85,4 @@ it('returns a 404 if the assignment do not belong to course', async () => {
     })
     .expect(404);
 });
+
