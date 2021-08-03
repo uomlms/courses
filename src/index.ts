@@ -17,8 +17,14 @@ const start = async () => {
   if (!process.env.KAFKA_URL) {
     throw new Error('KAFKA_URL must be defined');
   }
-  if (!process.env.KAFKA_GROUP_ID) {
-    throw new Error('KAFKA_GROUP_ID must be defined');
+  if (!process.env.AWS_ACCESS_KEY_ID) {
+    throw new Error('AWS_ACCESS_KEY_ID must be defined');
+  }
+  if (!process.env.AWS_SECRET_ACCESS_KEY) {
+    throw new Error('AWS_SECRET_ACCESS_KEY must be defined');
+  }
+  if (!process.env.AWS_BUCKET) {
+    throw new Error('AWS_BUCKET must be defined');
   }
 
   try {
