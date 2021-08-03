@@ -50,13 +50,12 @@ router.post(
 
     await submission.save();
 
-    // new AssignmentSubmitProducer(kafka.producer).produce({
-    //   assignmentId: assignment.id,
-    //   configFile: assignment.configFile,
-    //   sourceFile: sourceFile.location,
-    //   // userId: currentUser.id
-    //   userId: "60df53ba55887d3be09222dd"
-    // });
+    new AssignmentSubmitProducer(kafka.producer).produce({
+      assignmentId: assignment.id,
+      configFile: assignment.configFile,
+      sourceFile: sourceFile.location,
+      userId: currentUser.id
+    });
 
     res.send(submission);
   });
