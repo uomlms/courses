@@ -45,15 +45,15 @@ router.post(
       uid: currentUser.id,
       assignmentId: assignment.id,
       status: 'pending',
-      files: [sourceFile.location]
+      files: [sourceFile?.location]
     });
 
     await submission.save();
 
     new AssignmentSubmitProducer(kafka.producer).produce({
       assignmentId: assignment.id,
-      configFile: assignment.configFile,
-      sourceFile: sourceFile.location,
+      configFile: assignment?.configFile,
+      sourceFile: sourceFile?.location,
       userId: currentUser.id
     });
 
