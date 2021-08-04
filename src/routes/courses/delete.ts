@@ -14,7 +14,7 @@ router.delete(
       throw new NotFoundError();
     }
 
-    await Course.deleteOne(course);
+    await Course.findByIdAndRemove(req.params.id);
     res.send({});
   });
 

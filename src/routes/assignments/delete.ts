@@ -19,7 +19,7 @@ router.delete(
       throw new NotFoundError();
     }
 
-    await Assignment.deleteOne(assignment);
+    await Assignment.findByIdAndRemove(req.params.id);
     res.send({});
   });
 
