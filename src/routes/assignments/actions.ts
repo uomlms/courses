@@ -52,6 +52,7 @@ router.post(
 
     new AssignmentSubmitProducer(kafka.producer).produce({
       assignmentId: assignment.id,
+      submissionId: submission._id,
       configFile: assignment?.configFile,
       sourceFile: sourceFile?.location,
       userId: currentUser.id
