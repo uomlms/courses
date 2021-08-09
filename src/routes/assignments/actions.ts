@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { requireAuth, kafka, NotFoundError } from '@uomlms/common';
+import { requireAuth, kafka, NotFoundError, BadRequestError } from '@uomlms/common';
 import { Submission } from '../../models/submission';
 import { courseExists } from '../../middlewares/course-exists';
 import { validateAssignment } from '../../middlewares/validate-assignment';
@@ -39,13 +39,17 @@ router.post(
   }).single('source'),
   async (req: Request, res: Response) => {
     const sourceFile = req.file as Express.MulterS3.File;
+    if (!sourceFile) {
+      throw new BadRequestError("Source file is mandatory");
+    }
+
     const assignment = req.assignment!;
     const currentUser = req.currentUser!;
     const submission = Submission.build({
       uid: currentUser.id,
       assignmentId: assignment.id,
       status: 'pending',
-      files: [sourceFile?.location]
+      files: [sourceFile.location]
     });
 
     await submission.save();
@@ -54,7 +58,7 @@ router.post(
       assignmentId: assignment.id,
       submissionId: submission._id,
       configFile: assignment?.configFile,
-      sourceFile: sourceFile?.location,
+      sourceFile: sourceFile.location,
       userId: currentUser.id
     });
 
