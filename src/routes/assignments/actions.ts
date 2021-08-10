@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { requireAuth, kafka, NotFoundError, BadRequestError } from '@uomlms/common';
+import { requireAuth, kafka, NotFoundError, BadRequestError, currentUser } from '@uomlms/common';
 import { Submission } from '../../models/submission';
 import { courseExists } from '../../middlewares/course-exists';
 import { validateAssignment } from '../../middlewares/validate-assignment';
@@ -59,7 +59,9 @@ router.post(
       submissionId: submission._id,
       configFile: assignment?.configFile,
       sourceFile: sourceFile.location,
-      userId: currentUser.id
+      user: {
+        token: currentUser.token
+      }
     });
 
     res.send(submission);
