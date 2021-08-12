@@ -9,6 +9,21 @@ import { uploadS3 } from '@uomlms/common';
 const basePath = '/api/courses/:courseId/assignments/:id';
 const router = express.Router();
 
+router.post(`${basePath}/test-submit`, (req: Request, res: Response) => {
+  new AssignmentSubmitProducer(kafka.producer).produce({
+    assignmentId: "assignment.id",
+    submissionId: "submission.id",
+    configFile: "",
+    sourceFile: "",
+    user: {
+      token: "currentUser.token"
+    }
+  });
+
+  res.send({});
+});
+
+
 router.get(
   `${basePath}/submit`,
   requireAuth("student"),
@@ -68,7 +83,7 @@ router.post(
   });
 
 router.post(
-  `${basePath}/upload/config`,
+  `${basePath}/config`,
   requireAuth("staff"),
   courseExists,
   validateAssignment,
