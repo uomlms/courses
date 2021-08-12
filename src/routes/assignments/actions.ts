@@ -51,7 +51,7 @@ router.post(
   courseExists,
   validateAssignment,
   uploadS3({
-    destination: 'tmp'
+    destination: 'submissions'
   }).single('source'),
   async (req: Request, res: Response) => {
     const sourceFile = req.file as Express.MulterS3.File;
