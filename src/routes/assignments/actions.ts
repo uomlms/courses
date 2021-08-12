@@ -1,10 +1,11 @@
 import express, { Request, Response } from 'express';
-import { requireAuth, kafka, NotFoundError, BadRequestError, currentUser } from '@uomlms/common';
+import { requireAuth, kafka, NotFoundError, BadRequestError, getObject } from '@uomlms/common';
 import { Submission } from '../../models/submission';
 import { courseExists } from '../../middlewares/course-exists';
 import { validateAssignment } from '../../middlewares/validate-assignment';
 import { AssignmentSubmitProducer } from '../../kafka/producers/assignment-submit-producer';
 import { uploadS3 } from '@uomlms/common';
+import path from 'path';
 
 const basePath = '/api/courses/:courseId/assignments/:id';
 const router = express.Router();
@@ -81,6 +82,24 @@ router.post(
 
     res.send(submission);
   });
+
+router.get(
+  `${basePath}/config`,
+  requireAuth("staff"),
+  courseExists,
+  validateAssignment,
+  async (req: Request, res: Response) => {
+    const assignment = req.assignment!;
+    if (!assignment.configFile) {
+      throw new NotFoundError();
+    }
+
+    const configObj = await getObject(assignment.configFile);
+    const filename = path.basename(assignment.configFile);
+    res.attachment(filename);
+    res.send(configObj.Body);
+  }
+);
 
 router.post(
   `${basePath}/config`,
