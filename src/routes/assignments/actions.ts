@@ -111,13 +111,13 @@ router.post(
   }).single('config'),
   async (req: Request, res: Response) => {
     const file = req.file as Express.MulterS3.File;
-    const assignment = req.assignment;
+    const assignment = req.assignment!;
 
-    assignment!.set({
+    assignment.set({
       configFile: file.key
     });
 
-    await assignment!.save();
+    await assignment.save();
 
     res.send(assignment);
   });
