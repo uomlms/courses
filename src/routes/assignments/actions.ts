@@ -49,7 +49,7 @@ router.post(
       uid: currentUser.id,
       assignmentId: assignment.id,
       status: 'pending',
-      files: [sourceFile.location]
+      files: [sourceFile.key]
     });
 
     await submission.save();
@@ -58,7 +58,7 @@ router.post(
       assignmentId: assignment.id,
       submissionId: submission._id,
       configFile: assignment?.configFile,
-      sourceFile: sourceFile.location,
+      sourceFile: sourceFile.key,
       user: {
         token: currentUser.token
       }
@@ -80,7 +80,7 @@ router.post(
     const assignment = req.assignment;
 
     assignment!.set({
-      configFile: file.location
+      configFile: file.key
     });
 
     await assignment!.save();
