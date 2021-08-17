@@ -18,6 +18,10 @@ router.patch(
       .not()
       .isEmpty()
       .withMessage('Description is required'),
+    body('professor')
+      .not()
+      .isEmpty()
+      .withMessage('Professor is required'),
     body('semester')
       .isFloat({ min: 1, max: 12 })
       .withMessage('Semester is required'),
@@ -29,8 +33,8 @@ router.patch(
       throw new NotFoundError();
     }
 
-    const { name, description, semester } = req.body;
-    course.set({ name, description, semester });
+    const { name, description, semester, professor } = req.body;
+    course.set({ name, description, semester, professor });
 
     await course.save();
 

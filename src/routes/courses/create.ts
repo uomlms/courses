@@ -18,15 +18,19 @@ router.post(
       .not()
       .isEmpty()
       .withMessage('Description is required'),
+    body('professor')
+      .not()
+      .isEmpty()
+      .withMessage('Professor is required'),
     body('semester')
       .isFloat({ min: 1, max: 12 })
       .withMessage('Semester is required'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { name, description, semester } = req.body;
+    const { name, description, semester, professor } = req.body;
     const course = Course.build({
-      name, description, semester
+      name, description, semester, professor
     });
 
     await course.save();

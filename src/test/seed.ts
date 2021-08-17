@@ -6,6 +6,7 @@ const createCourse = (
   data: any = {
     name: "a name",
     description: "a description",
+    professor: "a professor",
     semester: 3
   }) => {
   const path = '/api/courses';

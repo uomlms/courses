@@ -4,6 +4,7 @@ import { Assignment } from './assignments';
 interface CourseAttrs {
   name: string;
   description: string;
+  professor: string;
   semester: number;
   status?: string;
 }
@@ -11,6 +12,7 @@ interface CourseAttrs {
 interface CourseDoc extends mongoose.Document {
   name: string;
   description: string;
+  professor: string;
   semester: number;
   status?: string;
 }
@@ -30,6 +32,10 @@ const CourseSchema = new mongoose.Schema({
   },
   semester: {
     type: Number,
+    required: true
+  },
+  professor: {
+    type: String,
     required: true
   },
   status: {

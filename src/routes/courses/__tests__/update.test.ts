@@ -32,6 +32,7 @@ it('returns a status 401 if the user has not role staff', async () => {
     .send({
       name: 'a title',
       description: 'a description',
+      professor: 'a professor',
       semester: 1
     })
     .expect(401);
@@ -42,6 +43,7 @@ it('returns a status 401 if the user has not role staff', async () => {
     .send({
       name: 'a title',
       description: 'a description',
+      professor: 'a professor',
       semester: 1
     })
     .expect(401);
@@ -67,6 +69,7 @@ it('returns an error if an invalid name is provided', async () => {
     .send({
       name: '',
       description: 'a description',
+      professor: 'a professor',
       semester: 1
     })
     .expect(400);
@@ -76,6 +79,7 @@ it('returns an error if an invalid name is provided', async () => {
     .set('Cookie', global.signup("staff"))
     .send({
       description: 'a description',
+      professor: 'a professor',
       semester: 1
     })
     .expect(400);
@@ -90,6 +94,7 @@ it('returns an error if an invalid description is provided', async () => {
     .send({
       name: 'a name',
       description: '',
+      professor: 'a professor',
       semester: 12
     })
     .expect(400);
@@ -99,6 +104,32 @@ it('returns an error if an invalid description is provided', async () => {
     .set('Cookie', global.signup("staff"))
     .send({
       name: 'a name',
+      professor: 'a professor',
+      semester: 12
+    })
+    .expect(400);
+});
+
+it('returns an error if an invalid professor is provided', async () => {
+  const id = global.generateId();
+  const path = `${basePath}/${id}`;
+  await request(app)
+    .patch(path)
+    .set('Cookie', global.signup("staff"))
+    .send({
+      name: 'a name',
+      description: 'a description',
+      professor: '',
+      semester: 12
+    })
+    .expect(400);
+
+  await request(app)
+    .patch(path)
+    .set('Cookie', global.signup("staff"))
+    .send({
+      name: 'a name',
+      description: 'a description',
       semester: 12
     })
     .expect(400);
@@ -114,6 +145,7 @@ it('returns an error if an invalid semester is provided', async () => {
     .send({
       name: 'a name',
       description: 'a description',
+      professor: 'a professor',
       semester: 13
     })
     .expect(400);
@@ -124,6 +156,7 @@ it('returns an error if an invalid semester is provided', async () => {
     .send({
       name: 'a name',
       description: 'a description',
+      professor: 'a professor',
       semester: 0
     })
     .expect(400);
@@ -133,7 +166,8 @@ it('returns an error if an invalid semester is provided', async () => {
     .set('Cookie', global.signup("staff"))
     .send({
       name: 'a name',
-      description: 'a description'
+      description: 'a description',
+      professor: 'a professor'
     })
     .expect(400);
 
@@ -143,6 +177,7 @@ it('returns an error if an invalid semester is provided', async () => {
     .send({
       name: 'a name',
       description: 'a description',
+      professor: 'a professor',
       semester: ''
     })
     .expect(400);
