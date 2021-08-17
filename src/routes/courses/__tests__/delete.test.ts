@@ -1,6 +1,8 @@
 import request from 'supertest';
 import { app } from '../../../app';
+import { createCourse, createAssignment } from '../../../test/seed';
 import { Course } from '../../../models/courses';
+import { Assignment } from '../../../models/assignments';
 
 const basePath = '/api/courses';
 
@@ -86,4 +88,29 @@ it('deletes a course', async () => {
     .expect(200);
 
   expect(getResponse.body.length).toEqual(0);
+});
+
+it('deletes a course and its assignments', async () => {
+  const course = await createCourse();
+
+  let courses = await Course.find({});
+  expect(courses.length).toEqual(1);
+
+  const assignment = await createAssignment({ courseId: course.body.id });
+
+  let assignments = await Assignment.find({});
+  expect(assignments.length).toEqual(1);
+
+  await request(app)
+    .delete(`${basePath}/${course.body.id}`)
+    .set('Cookie', global.signup("staff"))
+    .send()
+    .expect(200);
+
+  courses = await Course.find({});
+  expect(courses.length).toEqual(0);
+
+  assignments = await Assignment.find({});
+  expect(assignments.length).toEqual(0);
+
 });

@@ -86,7 +86,7 @@ it('deletes an assignment', async () => {
   const courses = await Course.find({});
   expect(courses.length).toEqual(1);
 
-  const createAssignmentResponse = await await createAssignment({ courseId: course.body.id })
+  const createAssignmentResponse = await createAssignment({ courseId: course.body.id });
 
   let assignments = await Assignment.find({});
   expect(assignments.length).toEqual(1);
