@@ -80,7 +80,9 @@ router.post(
       }
     });
 
-    res.send(submission);
+    res
+      .status(201)
+      .send(submission);
   });
 
 router.get(
