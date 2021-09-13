@@ -35,7 +35,7 @@ router.get(
     const currentUser = req.currentUser!;
     const assignments = await Submission.find({
       uid: currentUser.id,
-      assignmentId: assignment.id
+      assignment: assignment.id
     });
 
     if (!assignments.length) {
@@ -63,7 +63,7 @@ router.post(
     const currentUser = req.currentUser!;
     const submission = Submission.build({
       uid: currentUser.id,
-      assignmentId: assignment.id,
+      assignment: assignment.id,
       status: 'pending',
       files: [sourceFile.key]
     });

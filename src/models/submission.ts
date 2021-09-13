@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 interface SubmissionAttrs {
   uid: string;
-  assignmentId: string;
+  assignment: string;
   status: string;
   result?: string;
   files?: string[];
@@ -10,7 +10,7 @@ interface SubmissionAttrs {
 
 interface SubmissionDoc extends mongoose.Document {
   uid: string;
-  assignmentId: string;
+  assignment: string;
   status: string;
   result?: string;
   files?: string[];
@@ -25,7 +25,7 @@ const SubmissionSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     required: [true, "User is required"]
   },
-  assignmentId: {
+  assignment: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Assignment",
     required: [true, "Assignment is required"]
