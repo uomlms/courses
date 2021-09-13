@@ -1,0 +1,62 @@
+<!-- HTML for static distribution bundle build -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Courses Service - Documentation</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.0.0-beta.4/swagger-ui.css"
+    integrity="sha512-VPWSISWhdzVYSPDjPygJ8X6QNBHBoMur97DzhYvzuxmH1ecPjUDJVvKmpDcj9el3LU5rewSechN3rPwZSBnfLA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="icon" type="image/png" href="https://img.icons8.com/ios-filled/50/000000/book.png" sizes="32x32" />
+  <style>
+    html {
+      box-sizing: border-box;
+      overflow: -moz-scrollbars-vertical;
+      overflow-y: scroll;
+    }
+
+    *,
+    *:before,
+    *:after {
+      box-sizing: inherit;
+    }
+
+    body {
+      margin: 0;
+      background: #fafafa;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="swagger-ui"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.0.0-beta.4/swagger-ui-bundle.js"
+    integrity="sha512-wND9kqA2Bbesc07YQoRyavUEKrFUGEIDksvR92SSyAvQvLTIa2keDAkVu0HxThUCNCM2o/pokdNK9efHTTXqYw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.0.0-beta.4/swagger-ui-standalone-preset.js"
+    integrity="sha512-OEerAm/TSjc0mAFWqWe3ETbwanPGYVLUW+kDxBPFknDzzV/pNa7DqZt040Z5c4Y4jeTAUSr+XluEnrqdvNnfNQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    window.onload = function () {
+      // Begin Swagger UI call region
+      const ui = SwaggerUIBundle({
+        url: "docs.json",
+        dom_id: '#swagger-ui',
+        deepLinking: true,
+        presets: [
+          SwaggerUIBundle.presets.apis,
+          SwaggerUIStandalonePreset
+        ],
+        plugins: [
+          SwaggerUIBundle.plugins.DownloadUrl
+        ],
+        layout: "StandaloneLayout"
+      });
+      // End Swagger UI call region
+      window.ui = ui;
+    };
+  </script>
+</body>
+
+</html>
