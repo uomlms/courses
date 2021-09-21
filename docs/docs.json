@@ -1,815 +1,816 @@
 {
-  "openapi": "3.0.1",
-  "info": {
-    "title": "Courses Service",
-    "description": "Courses service includes all the logic about courses, assignments and submissions.",
-    "contact": {
-      "email": "orestis.ner@gmail.com"
-    },
-    "license": {
-      "name": "Licensed Under MIT",
-      "url": "https://spdx.org/licenses/MIT.html"
-    },
-    "version": "1.0.0"
-  },
-  "servers": [
-    {
-      "url": "https://uomlms.dev",
-      "description": "Skaffold Development"
-    },
-    {
-      "url": "http://localhost:3000",
-      "description": "Local Development"
-    }
-  ],
-  "tags": [
-    {
-      "name": "courses"
-    },
-    {
-      "name": "assignments"
-    }
-  ],
-  "paths": {
-    "/api/courses": {
-      "post": {
-        "tags": [
-          "courses"
-        ],
-        "summary": "Creates a course",
-        "operationId": "createCourse",
-        "security": [
-          {
-            "cookieAuth": []
-          }
-        ],
-        "requestBody": {
-          "$ref": "#/components/requestBody/CourseBody"
-        },
-        "responses": {
-          "201": {
-            "description": "Returns the created course",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Course"
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/Invalid Input"
-          },
-          "401": {
-            "$ref": "#/components/responses/Not Authorized"
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "courses"
-        ],
-        "security": [
-          {
-            "cookieAuth": []
-          }
-        ],
-        "summary": "Returns all courses",
-        "operationId": "getCourses",
-        "responses": {
-          "200": {
-            "description": "Returns all the course",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Course"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/courses/{id}": {
-      "get": {
-        "tags": [
-          "courses"
-        ],
-        "summary": "Gets a course",
-        "operationId": "getCourse",
-        "security": [
-          {
-            "cookieAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/idParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Returns the course",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Course"
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/Not Authorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/Not Found"
-          }
-        }
-      },
-      "patch": {
-        "tags": [
-          "courses"
-        ],
-        "summary": "Updates a course",
-        "operationId": "updateCourse",
-        "security": [
-          {
-            "cookieAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/idParam"
-          }
-        ],
-        "requestBody": {
-          "$ref": "#/components/requestBody/CourseBody"
-        },
-        "responses": {
-          "200": {
-            "description": "Returns the updated course",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Course"
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/Invalid Input"
-          },
-          "401": {
-            "$ref": "#/components/responses/Not Authorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/Not Found"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "courses"
-        ],
-        "summary": "Deletes a course",
-        "operationId": "deleteCourse",
-        "security": [
-          {
-            "cookieAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/idParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Course deleted successfully",
-            "content": {}
-          },
-          "401": {
-            "$ref": "#/components/responses/Not Authorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/Not Found"
-          }
-        }
-      }
-    },
-    "/api/courses/{courseId}/assignments": {
-      "post": {
-        "tags": [
-          "assignments"
-        ],
-        "summary": "Creates an assignemnt",
-        "operationId": "createAssignment",
-        "security": [
-          {
-            "cookieAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/courseParam"
-          }
-        ],
-        "requestBody": {
-          "$ref": "#/components/requestBody/AssignmentBody"
-        },
-        "responses": {
-          "201": {
-            "description": "Returns the created assignment",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Assignment"
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/Invalid Input"
-          },
-          "401": {
-            "$ref": "#/components/responses/Not Authorized"
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "assignments"
-        ],
-        "summary": "Returns all assignments of a course",
-        "operationId": "getAssignments",
-        "security": [
-          {
-            "cookieAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/courseParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Returns all assignments of a course",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Assignment"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/courses/{courseId}/assignments/{id}": {
-      "get": {
-        "tags": [
-          "assignments"
-        ],
-        "summary": "Returns an assignment",
-        "operationId": "getAssignment",
-        "security": [
-          {
-            "cookieAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/courseParam"
-          },
-          {
-            "$ref": "#/components/parameters/idParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Returns the assignment",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Assignment"
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/Not Authorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/Not Found"
-          }
-        }
-      },
-      "patch": {
-        "tags": [
-          "assignments"
-        ],
-        "summary": "Updates an assignment",
-        "operationId": "updateAssignment",
-        "security": [
-          {
-            "cookieAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/courseParam"
-          },
-          {
-            "$ref": "#/components/parameters/idParam"
-          }
-        ],
-        "requestBody": {
-          "$ref": "#/components/requestBody/AssignmentBody"
-        },
-        "responses": {
-          "200": {
-            "description": "Returns the updated assignment",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Assignment"
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/Invalid Input"
-          },
-          "401": {
-            "$ref": "#/components/responses/Not Authorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/Not Found"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "assignments"
-        ],
-        "summary": "Deletes an assignment",
-        "operationId": "deleteAssignment",
-        "security": [
-          {
-            "cookieAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/courseParam"
-          },
-          {
-            "$ref": "#/components/parameters/idParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Assignment deleted successfully",
-            "content": {}
-          },
-          "401": {
-            "$ref": "#/components/responses/Not Authorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/Not Found"
-          }
-        }
-      }
-    },
-    "/api/courses/{courseId}/assignments/{id}/config": {
-      "post": {
-        "tags": [
-          "assignments"
-        ],
-        "summary": "Add or Replace config file in an assignment",
-        "operationId": "addConfigFile",
-        "security": [
-          {
-            "cookieAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/courseParam"
-          },
-          {
-            "$ref": "#/components/parameters/idParam"
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "config": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Add or Replace config file in an assignment",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Assignment"
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/Not Authorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/Not Found"
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "assignments"
-        ],
-        "summary": "get config file in an assignment",
-        "operationId": "getConfigFile",
-        "security": [
-          {
-            "cookieAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/courseParam"
-          },
-          {
-            "$ref": "#/components/parameters/idParam"
-          }
-        ]
-      }
-    },
-    "/api/courses/{courseId}/assignments/{id}/submit": {
-      "post": {
-        "tags": [
-          "assignments"
-        ],
-        "summary": "Creates submission in an assignment",
-        "operationId": "createSubmissions",
-        "security": [
-          {
-            "cookieAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/courseParam"
-          },
-          {
-            "$ref": "#/components/parameters/idParam"
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "source": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Creates a submission in an assignemnt",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Submission"
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/Not Authorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/Not Found"
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "assignments"
-        ],
-        "summary": "Returns all the submissions of an assignemnt",
-        "operationId": "getSubmissions",
-        "security": [
-          {
-            "cookieAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/courseParam"
-          },
-          {
-            "$ref": "#/components/parameters/idParam"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Returns all the submissions of an assignemnt",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Submission"
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/Not Authorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/Not Found"
-          }
-        }
-      }
-    }
-  },
-  "components": {
-    "schemas": {
-      "Assignment": {
-        "title": "Assignment",
-        "required": [
-          "name",
-          "description",
-          "deadline",
-          "type",
-          "course"
-        ],
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "files": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "deadline": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "configFile": {
-            "type": "string"
-          },
-          "type": {
-            "type": "string",
-            "enum": {
-              "values": [
-                "obligatory",
-                "optional"
-              ],
-              "message": "Type {VALUE} is not supported. Type is either obligatory or optional."
-            }
-          },
-          "status": {
-            "type": "string",
-            "enum": {
-              "values": [
-                "active",
-                "inactive",
-                "expired"
-              ],
-              "message": "Status {VALUE} is not supported. Status is either active, inactive or expired"
-            }
-          },
-          "course": {
-            "type": "string"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "Course": {
-        "title": "Course",
-        "required": [
-          "name",
-          "description",
-          "semester",
-          "professor"
-        ],
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "semester": {
-            "type": "number"
-          },
-          "professor": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "active",
-              "inactive"
-            ]
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "Submission": {
-        "title": "Submission",
-        "required": [
-          "uid",
-          "assignment",
-          "status"
-        ],
-        "properties": {
-          "uid": {
-            "type": "string"
-          },
-          "assignment": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string",
-            "enum": {
-              "values": [
-                "pending",
-                "fail",
-                "success"
-              ],
-              "message": "Type {VALUE} is not supported. Type is either pending, fail or success."
-            }
-          },
-          "result": {
-            "type": "string"
-          },
-          "files": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      }
-    },
-    "parameters": {
-      "idParam": {
-        "name": "id",
-        "in": "path",
-        "description": "id parameter",
-        "required": true,
-        "schema": {
-          "type": "string",
-          "format": "uuid"
-        }
-      },
-      "courseParam": {
-        "name": "courseId",
-        "in": "path",
-        "description": "course id parameter",
-        "required": true,
-        "schema": {
-          "type": "string",
-          "format": "uuid"
-        }
-      }
-    },
-    "requestBody": {
-      "CourseBody": {
-        "description": "Course object",
-        "required": true,
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "semester": {
-                  "type": "number"
-                },
-                "professor": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      },
-      "AssignmentBody": {
-        "description": "Assignment object",
-        "required": true,
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "deadline": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "type": {
-                  "type": "string",
-                  "enum": {
-                    "values": [
-                      "obligatory",
-                      "optional"
-                    ]
-                  }
-                },
-                "status": {
-                  "type": "string",
-                  "enum": {
-                    "values": [
-                      "active",
-                      "inactive",
-                      "expired"
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "responses": {
-      "Not Authorized": {
-        "description": "Not authorized",
-        "content": {
-          "errors": [
-            {
-              "message": "Not authorized"
-            }
-          ]
-        }
-      },
-      "Not Found": {
-        "description": "Not found",
-        "content": {
-          "errors": [
-            {
-              "message": "Not found"
-            }
-          ]
-        }
-      },
-      "Invalid Input": {
-        "description": "Invalid Input",
-        "content": {}
-      }
-    },
-    "securitySchemes": {
-      "cookieAuth": {
-        "type": "apiKey",
-        "in": "cookie",
-        "name": "express:sess"
-      }
-    }
-  }
+	"openapi": "3.0.1",
+	"info": {
+		"title": "Courses Service",
+		"description": "Courses service includes all the logic about courses, assignments and submissions.",
+		"contact": {
+			"email": "orestis.ner@gmail.com"
+		},
+		"license": {
+			"name": "Licensed Under MIT",
+			"url": "https://spdx.org/licenses/MIT.html"
+		},
+		"version": "1.0.0"
+	},
+	"servers": [
+		{
+			"url": "https://uomlms.dev",
+			"description": "Skaffold Development"
+		},
+		{
+			"url": "http://localhost:3000",
+			"description": "Local Development"
+		}
+	],
+	"tags": [
+		{
+			"name": "courses"
+		},
+		{
+			"name": "assignments"
+		}
+	],
+	"paths": {
+		"/api/courses": {
+			"post": {
+				"tags": [
+					"courses"
+				],
+				"summary": "Creates a course",
+				"operationId": "createCourse",
+				"security": [
+					{
+						"cookieAuth": []
+					}
+				],
+				"requestBody": {
+					"$ref": "#/components/requestBody/CourseBody"
+				},
+				"responses": {
+					"201": {
+						"description": "Returns the created course",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Course"
+								}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/Invalid Input"
+					},
+					"401": {
+						"$ref": "#/components/responses/Not Authorized"
+					}
+				}
+			},
+			"get": {
+				"tags": [
+					"courses"
+				],
+				"security": [
+					{
+						"cookieAuth": []
+					}
+				],
+				"summary": "Returns all courses",
+				"operationId": "getCourses",
+				"responses": {
+					"200": {
+						"description": "Returns all the course",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Course"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/courses/{id}": {
+			"get": {
+				"tags": [
+					"courses"
+				],
+				"summary": "Gets a course",
+				"operationId": "getCourse",
+				"security": [
+					{
+						"cookieAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"$ref": "#/components/parameters/idParam"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Returns the course",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Course"
+								}
+							}
+						}
+					},
+					"401": {
+						"$ref": "#/components/responses/Not Authorized"
+					},
+					"404": {
+						"$ref": "#/components/responses/Not Found"
+					}
+				}
+			},
+			"patch": {
+				"tags": [
+					"courses"
+				],
+				"summary": "Updates a course",
+				"operationId": "updateCourse",
+				"security": [
+					{
+						"cookieAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"$ref": "#/components/parameters/idParam"
+					}
+				],
+				"requestBody": {
+					"$ref": "#/components/requestBody/CourseBody"
+				},
+				"responses": {
+					"200": {
+						"description": "Returns the updated course",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Course"
+								}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/Invalid Input"
+					},
+					"401": {
+						"$ref": "#/components/responses/Not Authorized"
+					},
+					"404": {
+						"$ref": "#/components/responses/Not Found"
+					}
+				}
+			},
+			"delete": {
+				"tags": [
+					"courses"
+				],
+				"summary": "Deletes a course",
+				"operationId": "deleteCourse",
+				"security": [
+					{
+						"cookieAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"$ref": "#/components/parameters/idParam"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Course deleted successfully",
+						"content": {}
+					},
+					"401": {
+						"$ref": "#/components/responses/Not Authorized"
+					},
+					"404": {
+						"$ref": "#/components/responses/Not Found"
+					}
+				}
+			}
+		},
+		"/api/courses/{courseId}/assignments": {
+			"post": {
+				"tags": [
+					"assignments"
+				],
+				"summary": "Creates an assignemnt",
+				"operationId": "createAssignment",
+				"security": [
+					{
+						"cookieAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"$ref": "#/components/parameters/courseParam"
+					}
+				],
+				"requestBody": {
+					"$ref": "#/components/requestBody/AssignmentBody"
+				},
+				"responses": {
+					"201": {
+						"description": "Returns the created assignment",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Assignment"
+								}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/Invalid Input"
+					},
+					"401": {
+						"$ref": "#/components/responses/Not Authorized"
+					}
+				}
+			},
+			"get": {
+				"tags": [
+					"assignments"
+				],
+				"summary": "Returns all assignments of a course",
+				"operationId": "getAssignments",
+				"security": [
+					{
+						"cookieAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"$ref": "#/components/parameters/courseParam"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Returns all assignments of a course",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Assignment"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/courses/{courseId}/assignments/{id}": {
+			"get": {
+				"tags": [
+					"assignments"
+				],
+				"summary": "Returns an assignment",
+				"operationId": "getAssignment",
+				"security": [
+					{
+						"cookieAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"$ref": "#/components/parameters/courseParam"
+					},
+					{
+						"$ref": "#/components/parameters/idParam"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Returns the assignment",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Assignment"
+								}
+							}
+						}
+					},
+					"401": {
+						"$ref": "#/components/responses/Not Authorized"
+					},
+					"404": {
+						"$ref": "#/components/responses/Not Found"
+					}
+				}
+			},
+			"patch": {
+				"tags": [
+					"assignments"
+				],
+				"summary": "Updates an assignment",
+				"operationId": "updateAssignment",
+				"security": [
+					{
+						"cookieAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"$ref": "#/components/parameters/courseParam"
+					},
+					{
+						"$ref": "#/components/parameters/idParam"
+					}
+				],
+				"requestBody": {
+					"$ref": "#/components/requestBody/AssignmentBody"
+				},
+				"responses": {
+					"200": {
+						"description": "Returns the updated assignment",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Assignment"
+								}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/Invalid Input"
+					},
+					"401": {
+						"$ref": "#/components/responses/Not Authorized"
+					},
+					"404": {
+						"$ref": "#/components/responses/Not Found"
+					}
+				}
+			},
+			"delete": {
+				"tags": [
+					"assignments"
+				],
+				"summary": "Deletes an assignment",
+				"operationId": "deleteAssignment",
+				"security": [
+					{
+						"cookieAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"$ref": "#/components/parameters/courseParam"
+					},
+					{
+						"$ref": "#/components/parameters/idParam"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Assignment deleted successfully",
+						"content": {}
+					},
+					"401": {
+						"$ref": "#/components/responses/Not Authorized"
+					},
+					"404": {
+						"$ref": "#/components/responses/Not Found"
+					}
+				}
+			}
+		},
+		"/api/courses/{courseId}/assignments/{id}/config": {
+			"post": {
+				"tags": [
+					"assignments"
+				],
+				"summary": "Add or Replace config file in an assignment",
+				"operationId": "addConfigFile",
+				"security": [
+					{
+						"cookieAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"$ref": "#/components/parameters/courseParam"
+					},
+					{
+						"$ref": "#/components/parameters/idParam"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"config": {
+										"type": "string",
+										"format": "binary"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Add or Replace config file in an assignment",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Assignment"
+								}
+							}
+						}
+					},
+					"401": {
+						"$ref": "#/components/responses/Not Authorized"
+					},
+					"404": {
+						"$ref": "#/components/responses/Not Found"
+					}
+				}
+			},
+			"get": {
+				"tags": [
+					"assignments"
+				],
+				"summary": "get config file in an assignment",
+				"operationId": "getConfigFile",
+				"security": [
+					{
+						"cookieAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"$ref": "#/components/parameters/courseParam"
+					},
+					{
+						"$ref": "#/components/parameters/idParam"
+					}
+				]
+			}
+		},
+		"/api/courses/{courseId}/assignments/{id}/submit": {
+			"post": {
+				"tags": [
+					"assignments"
+				],
+				"summary": "Creates submission in an assignment",
+				"operationId": "createSubmissions",
+				"security": [
+					{
+						"cookieAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"$ref": "#/components/parameters/courseParam"
+					},
+					{
+						"$ref": "#/components/parameters/idParam"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"source": {
+										"type": "string",
+										"format": "binary"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Creates a submission in an assignemnt",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Submission"
+								}
+							}
+						}
+					},
+					"401": {
+						"$ref": "#/components/responses/Not Authorized"
+					},
+					"404": {
+						"$ref": "#/components/responses/Not Found"
+					}
+				}
+			},
+			"get": {
+				"tags": [
+					"assignments"
+				],
+				"summary": "Returns all the submissions of an assignemnt",
+				"operationId": "getSubmissions",
+				"security": [
+					{
+						"cookieAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"$ref": "#/components/parameters/courseParam"
+					},
+					{
+						"$ref": "#/components/parameters/idParam"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Returns all the submissions of an assignemnt",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Submission"
+								}
+							}
+						}
+					},
+					"401": {
+						"$ref": "#/components/responses/Not Authorized"
+					},
+					"404": {
+						"$ref": "#/components/responses/Not Found"
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"schemas": {
+			"Assignment": {
+				"title": "Assignment",
+				"required": [
+					"name",
+					"description",
+					"deadline",
+					"type",
+					"course"
+				],
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"files": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"deadline": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"configFile": {
+						"type": "string"
+					},
+					"type": {
+						"type": "string",
+						"enum": {
+							"values": [
+								"obligatory",
+								"optional"
+							],
+							"message": "Type {VALUE} is not supported. Type is either obligatory or optional."
+						}
+					},
+					"status": {
+						"type": "string",
+						"enum": {
+							"values": [
+								"active",
+								"inactive",
+								"expired"
+							],
+							"message": "Status {VALUE} is not supported. Status is either active, inactive or expired"
+						}
+					},
+					"course": {
+						"type": "string"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				}
+			},
+			"Course": {
+				"title": "Course",
+				"required": [
+					"name",
+					"description",
+					"semester",
+					"professor"
+				],
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"semester": {
+						"type": "number"
+					},
+					"professor": {
+						"type": "string"
+					},
+					"status": {
+						"type": "string",
+						"enum": [
+							"active",
+							"inactive"
+						]
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				}
+			},
+			"Submission": {
+				"title": "Submission",
+				"required": [
+					"uid",
+					"assignment",
+					"status"
+				],
+				"properties": {
+					"uid": {
+						"type": "string"
+					},
+					"assignment": {
+						"type": "string"
+					},
+					"status": {
+						"type": "string",
+						"enum": {
+							"values": [
+								"pending",
+								"fail",
+								"success",
+								"partially-success"
+							],
+							"message": "Type {VALUE} is not supported. Type is either pending, fail, success or partially-success"
+						}
+					},
+					"result": {
+						"type": "string"
+					},
+					"files": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				}
+			}
+		},
+		"parameters": {
+			"idParam": {
+				"name": "id",
+				"in": "path",
+				"description": "id parameter",
+				"required": true,
+				"schema": {
+					"type": "string",
+					"format": "uuid"
+				}
+			},
+			"courseParam": {
+				"name": "courseId",
+				"in": "path",
+				"description": "course id parameter",
+				"required": true,
+				"schema": {
+					"type": "string",
+					"format": "uuid"
+				}
+			}
+		},
+		"requestBody": {
+			"CourseBody": {
+				"description": "Course object",
+				"required": true,
+				"content": {
+					"application/json": {
+						"schema": {
+							"type": "object",
+							"properties": {
+								"name": {
+									"type": "string"
+								},
+								"description": {
+									"type": "string"
+								},
+								"semester": {
+									"type": "number"
+								},
+								"professor": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			},
+			"AssignmentBody": {
+				"description": "Assignment object",
+				"required": true,
+				"content": {
+					"application/json": {
+						"schema": {
+							"type": "object",
+							"properties": {
+								"name": {
+									"type": "string"
+								},
+								"description": {
+									"type": "string"
+								},
+								"deadline": {
+									"type": "string",
+									"format": "date-time"
+								},
+								"type": {
+									"type": "string",
+									"enum": {
+										"values": [
+											"obligatory",
+											"optional"
+										]
+									}
+								},
+								"status": {
+									"type": "string",
+									"enum": {
+										"values": [
+											"active",
+											"inactive",
+											"expired"
+										]
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"responses": {
+			"Not Authorized": {
+				"description": "Not authorized",
+				"content": {
+					"errors": [
+						{
+							"message": "Not authorized"
+						}
+					]
+				}
+			},
+			"Not Found": {
+				"description": "Not found",
+				"content": {
+					"errors": [
+						{
+							"message": "Not found"
+						}
+					]
+				}
+			},
+			"Invalid Input": {
+				"description": "Invalid Input",
+				"content": {}
+			}
+		},
+		"securitySchemes": {
+			"cookieAuth": {
+				"type": "apiKey",
+				"in": "cookie",
+				"name": "express:sess"
+			}
+		}
+	}
 }
