@@ -33,8 +33,8 @@ const SubmissionSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: {
-      values: ["pending", "fail", "success"],
-      message: "Type {VALUE} is not supported. Type is either pending, fail or success.",
+      values: ["pending", "fail", "success", "partially-success"],
+      message: "Type {VALUE} is not supported. Type is either pending, fail, success or partially-success",
     },
     default: "pending",
     required: true
